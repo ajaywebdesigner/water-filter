@@ -1,0 +1,49 @@
+# =========================================================
+# PureLine Water Filtration - .htaccess
+# =========================================================
+
+RewriteEngine On
+RewriteBase /pure-water/
+
+# ---------------------------------------------------------
+# Force HTTPS
+# ---------------------------------------------------------
+RewriteCond %{HTTPS} !=on
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+
+# ---------------------------------------------------------
+# Remove .php from URLs
+# /benefits.php -> /benefits
+# ---------------------------------------------------------
+RewriteCond %{THE_REQUEST} \s/+pure-water/([^\s?]+)\.php(?:[\s?]|$) [NC]
+RewriteRule ^(.+)\.php$ /pure-water/$1 [R=301,L,NE]
+
+# ---------------------------------------------------------
+# Internally load .php files
+# /benefits -> benefits.php
+# ---------------------------------------------------------
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME}.php -f
+RewriteRule ^(.+?)/?$ $1.php [L]
+
+# ---------------------------------------------------------
+# index.php -> /
+# ---------------------------------------------------------
+RewriteCond %{THE_REQUEST} \s/+pure-water/index\.php(?:[\s?]|$) [NC]
+RewriteRule ^index\.php$ /pure-water/ [R=301,L]
+
+# ---------------------------------------------------------
+# Custom 404 Page
+# ---------------------------------------------------------
+ErrorDocument 404 /pure-water/404.php
+
+# ---------------------------------------------------------
+# Disable directory listing
+# ---------------------------------------------------------
+Options -Indexes
+
+# ---------------------------------------------------------
+# Default index
+# ---------------------------------------------------------
+DirectoryIndex index.php
